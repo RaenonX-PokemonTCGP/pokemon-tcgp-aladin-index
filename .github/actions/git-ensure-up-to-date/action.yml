@@ -1,0 +1,42 @@
+inputs:
+  repo-dir:
+    description: 'Directory of the git repo.'
+    required: true
+  branch:
+    description: 'Branch for the repo to track.'
+    required: true
+    default: 'main'
+
+runs:
+  using: "composite"
+  steps:
+  - name: git status (pre-check)
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git status
+
+  - name: git fetch
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git fetch
+
+  - name: git reset to `${{ inputs.branch }}`
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git reset --hard "origin/${{ inputs.branch }}"
+
+  # Ensures the repository is not in detached HEAD state
+  - name: git switch to `${{ inputs.branch }}`
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git switch -C "${{ inputs.branch }}"
+
+  - name: git pull (rebase)
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git pull --rebase
+
+  - name: git status (post-check)
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git status

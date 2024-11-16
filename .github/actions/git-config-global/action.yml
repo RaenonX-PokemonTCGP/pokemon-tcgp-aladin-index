@@ -1,0 +1,9 @@
+runs:
+  using: "composite"
+  steps:
+  - name: git config global options
+    shell: pwsh
+    run: |
+      git config --global user.email "raenonx0710@gmail.com"
+      git config --global core.longpaths true
+      git config --global core.autocrlf false

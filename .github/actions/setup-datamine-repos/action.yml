@@ -1,0 +1,119 @@
+inputs:
+  github-pat:
+    description: 'Github PAT for accessing the repositories.'
+    required: true
+  repo-dir-datamine-tools:
+    description: 'Repo directory for the datamine tools.'
+    required: true
+  repo-dir-aladin-index:
+    description: 'Repo directory for the aladin indexes.'
+    required: true
+  repo-dir-aladin-blob:
+    description: 'Repo directory for the aladin blobs.'
+    required: true
+  repo-dir-ui-core:
+    description: 'Repo directory for the core UI project.'
+    required: true
+  repo-dir-exporter:
+    description: 'Repo directory for the data exporter.'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Cache / Datamine Tools
+    uses: actions/cache@v4
+    with:
+      path: ${{ inputs.repo-dir-datamine-tools }}/.git
+      key: ${{ inputs.repo-dir-datamine-tools }}-git
+
+  - name: Checkout / Datamine Tools
+    uses: actions/checkout@v4
+    with:
+      repository: RaenonX-PokemonTCGP/pokemon-tcgp-datamine-tools
+      ref: main
+      token: ${{ inputs.github-pat }}
+      path: ${{ inputs.repo-dir-datamine-tools }}
+
+  - name: Cache / Aladin Index
+    uses: actions/cache@v4
+    with:
+      path: ${{ inputs.repo-dir-aladin-index }}/.git
+      key: ${{ inputs.repo-dir-aladin-index }}-git
+
+  - name: Checkout / Aladin Index
+    uses: actions/checkout@v4
+    with:
+      repository: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index
+      ref: main
+      token: ${{ inputs.github-pat }}
+      path: ${{ inputs.repo-dir-aladin-index }}
+
+  - name: Cache / Aladin Blobs
+    uses: actions/cache@v4
+    with:
+      path: ${{ inputs.repo-dir-aladin-blob }}/.git
+      key: ${{ inputs.repo-dir-aladin-blob }}-git
+
+  - name: Checkout / Aladin Blobs
+    uses: actions/checkout@v4
+    with:
+      repository: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-blobs
+      ref: main
+      token: ${{ inputs.github-pat }}
+      path: ${{ inputs.repo-dir-aladin-blob }}
+
+  - name: Cache / UI
+    uses: actions/cache@v4
+    with:
+      path: ${{ inputs.repo-dir-ui-core }}/.git
+      key: ${{ inputs.repo-dir-ui-core }}-git
+
+  - name: Checkout / UI
+    uses: actions/checkout@v4
+    with:
+      repository: RaenonX-PokemonTCGP/pokemon-tcgp-ui-core
+      ref: main
+      token: ${{ inputs.github-pat }}
+      path: ${{ inputs.repo-dir-ui-core }}
+
+  - name: Cache / Exporter
+    uses: actions/cache@v4
+    with:
+      path: ${{ inputs.repo-dir-exporter }}/.git
+      key: ${{ inputs.repo-dir-exporter }}-git
+
+  - name: Checkout / Exporter
+    uses: actions/checkout@v4
+    with:
+      repository: RaenonX-PokemonTCGP/pokemon-tcgp-exporter
+      ref: main
+      token: ${{ inputs.github-pat }}
+      path: ${{ inputs.repo-dir-exporter }}
+      submodules: true
+
+  - name: Setup .NET 8
+    uses: actions/setup-dotnet@v4
+    with:
+      dotnet-version: 8.x
+
+  - name: Setup Python 3.x
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.x'
+      cache: 'pip'
+
+  - name: Install Py dependencies (Datamine Tools)
+    shell: pwsh
+    run: pip install -r ${{ inputs.repo-dir-datamine-tools }}/requirements.txt
+
+  - name: Install Py dependencies (Exporter)
+    shell: pwsh
+    run: pip install -r ${{ inputs.repo-dir-exporter }}/requirements.txt
+
+  - name: Unzip Masterdata Dumper exe
+    shell: pwsh
+    run: |
+      Expand-Archive `
+        ${{ inputs.repo-dir-datamine-tools }}/.tools/AssetRipper.CLI.FolderExport/AssetRipper.CLI.FolderExport.zip `
+        -DestinationPath ${{ inputs.repo-dir-datamine-tools }}/.tools/AssetRipper.CLI.FolderExport

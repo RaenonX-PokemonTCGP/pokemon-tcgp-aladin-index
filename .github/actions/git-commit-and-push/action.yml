@@ -1,0 +1,34 @@
+inputs:
+  repo-dir:
+    description: 'Directory of the target git repo.'
+    required: true
+  branch:
+    description: 'Branch to commit and push.'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: git config user name
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git config user.name "RaenonX (Auto Datamine)"
+
+  - name: git add all
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git add .
+
+  - name: git commit & push
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: |
+      $Diff = $(git status --porcelain)
+      
+      if ($Diff) {
+        Write-Host $Diff
+        git commit -m "Updated by RaenonX-PokemonTCGP/pokemon-tcgp-assets@${{ github.sha }}"
+        git push
+      } else {
+        Write-Host "Nothing to commit"
+      }
