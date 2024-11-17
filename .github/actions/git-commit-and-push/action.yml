@@ -19,16 +19,26 @@ runs:
     shell: pwsh
     run: git add .
 
-  - name: git commit & push
+  - name: git commit
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
     run: |
-      $Diff = $(git status --porcelain)
-      
-      if ($Diff) {
-        Write-Host $Diff
+      $FileDiff = $(git status --porcelain)
+      if ($FileDiff) {
+        Write-Host $FileDiff
         git commit -m "Updated by RaenonX-PokemonTCGP/pokemon-tcgp-assets@${{ github.sha }}"
-        git push
       } else {
         Write-Host "Nothing to commit"
+      }
+
+  - name: git push
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: |
+      $RemoteDiff = $(git log origin/main..main)
+      if ($RemoteDiff) {
+        Write-Host $RemoteDiff
+        git push
+      } else {
+        Write-Host "Nothing to push"
       }
