@@ -12,6 +12,7 @@ on:
   push:
     paths:
     - index/assets/**
+  workflow_dispatch:
 
 env:
   REPO_DIR_DATAMINE_TOOLS: datamine-tools
