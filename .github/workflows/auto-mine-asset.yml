@@ -105,32 +105,11 @@ jobs:
       env:
         PTCGP_IMG_EXPORT_PATH: ${{ github.workspace }}/${{ env.REPO_DIR_UI_CORE }}/public/images/game
 
-    - name: Git Commit (Assets)
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
+    - name: Update Datamine Repos
+      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/datamine-repos-update@main
       with:
-        repo-dir: ${{ env.REPO_DIR_ASSETS }}
-        branch: main
-
-    - name: Git Commit (Masterdata)
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_MASTERDATA }}
-        branch: main
-
-    - name: Git Commit (Exporter)
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_EXPORTER }}
-        branch: main
-
-    - name: Git Commit (UI Core)
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_UI_CORE }}
-        branch: main
-
-    - name: Git Commit (Aladin Blob)
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_ALADIN_BLOBS }}
-        branch: main
+        repo-dir-aladin-blob: ${{ env.REPO_DIR_ALADIN_BLOBS }}
+        repo-dir-ui-core: ${{ env.REPO_DIR_UI_CORE }}
+        repo-dir-exporter: ${{ env.REPO_DIR_EXPORTER }}
+        repo-dir-assets: ${{ env.REPO_DIR_ASSETS }}
+        repo-dir-masterdata-dump: ${{ env.REPO_DIR_MASTERDATA }}

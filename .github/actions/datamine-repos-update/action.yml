@@ -1,0 +1,49 @@
+inputs:
+  repo-dir-aladin-blob:
+    description: 'Repo directory for the aladin blobs.'
+    required: true
+  repo-dir-ui-core:
+    description: 'Repo directory for the core UI project.'
+    required: true
+  repo-dir-exporter:
+    description: 'Repo directory for the data exporter.'
+    required: true
+  repo-dir-assets:
+    description: 'Repo directory for the asset dump.'
+    required: true
+  repo-dir-masterdata-dump:
+    description: 'Repo directory for the dumped masterdata.'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Git Commit (Assets)
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-assets }}
+      branch: main
+
+  - name: Git Commit (Masterdata)
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-masterdata-dump }}
+      branch: main
+
+  - name: Git Commit (Exporter)
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-exporter }}
+      branch: main
+
+  - name: Git Commit (UI Core)
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-ui-core }}
+      branch: main
+
+  - name: Git Commit (Aladin Blob)
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-commit-and-push@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-aladin-blob }}
+      branch: main
