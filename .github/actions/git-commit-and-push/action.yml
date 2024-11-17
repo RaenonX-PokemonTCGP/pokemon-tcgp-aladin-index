@@ -38,6 +38,8 @@ runs:
       $RemoteDiff = $(git log origin/main..main)
       if ($RemoteDiff) {
         Write-Host $RemoteDiff
+        # Make sure the history is linear
+        git pull --rebase
         git push
       } else {
         Write-Host "Nothing to push"
