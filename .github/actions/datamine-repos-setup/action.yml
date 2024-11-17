@@ -17,6 +17,12 @@ inputs:
   repo-dir-exporter:
     description: 'Repo directory for the data exporter.'
     required: true
+  repo-dir-assets:
+    description: 'Repo directory for the asset dump.'
+    required: true
+  repo-dir-masterdata-dump:
+    description: 'Repo directory for the dumped masterdata.'
+    required: true
 
 runs:
   using: "composite"
@@ -117,3 +123,29 @@ runs:
       Expand-Archive `
         ${{ inputs.repo-dir-datamine-tools }}/.tools/AssetRipper.CLI.FolderExport/AssetRipper.CLI.FolderExport.zip `
         -DestinationPath ${{ inputs.repo-dir-datamine-tools }}/.tools/AssetRipper.CLI.FolderExport
+
+  # - Moving exported assets changes `exporter`,
+  #   therefore this needs to be before the call to `.\Script-03-Move-Exports-And-Commit.ps1`
+  # - Submodules might not be up-to-date,
+  #   therefore calling this before calling `git-ensure-up-to-date` on submodules
+  - name: Ensure exporter repo up-to-date
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-exporter }}
+
+  # This is needed because assets repo are checked out as submodule, they'll be in detached HEAD state
+  - name: Ensure assets repo up-to-date
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-assets }}
+
+  # This is needed because assets repo are checked out as submodule, they'll be in detached HEAD state
+  - name: Ensure masterdata dump up-to-date
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-masterdata-dump }}
+
+  - name: Ensure aladin blobs repo up-to-date
+    uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
+    with:
+      repo-dir: ${{ inputs.repo-dir-aladin-blob }}

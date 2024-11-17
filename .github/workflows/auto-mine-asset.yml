@@ -36,7 +36,7 @@ jobs:
       uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-config-global@main
 
     - name: Setup Datamine Repos
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/setup-datamine-repos@main
+      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/datamine-repos-setup@main
       with:
         github-pat: ${{ secrets.GH_PAT }}
         repo-dir-datamine-tools: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
@@ -44,32 +44,8 @@ jobs:
         repo-dir-aladin-blob: ${{ env.REPO_DIR_ALADIN_BLOBS }}
         repo-dir-ui-core: ${{ env.REPO_DIR_UI_CORE }}
         repo-dir-exporter: ${{ env.REPO_DIR_EXPORTER }}
-
-    # - Moving exported assets changes `exporter`,
-    #   therefore this needs to be before the call to `.\Script-03-Move-Exports-And-Commit.ps1`
-    # - Submodules might not be up-to-date,
-    #   therefore calling this before calling `git-ensure-up-to-date` on submodules
-    - name: Ensure exporter repo up-to-date
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_EXPORTER }}
-
-    # This is needed because assets repo are checked out as submodule, they'll be in detached HEAD state
-    - name: Ensure assets repo up-to-date
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_ASSETS }}
-
-    # This is needed because assets repo are checked out as submodule, they'll be in detached HEAD state
-    - name: Ensure masterdata dump up-to-date
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_MASTERDATA }}
-
-    - name: Ensure aladin blobs repo up-to-date
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_ALADIN_BLOBS }}
+        repo-dir-assets: ${{ env.REPO_DIR_ASSETS }}
+        repo-dir-masterdata-dump: ${{ env.REPO_DIR_MASTERDATA }}
 
     - name: Decrypt Aladin files
       shell: pwsh
