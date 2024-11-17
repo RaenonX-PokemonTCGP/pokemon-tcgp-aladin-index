@@ -1,0 +1,90 @@
+# Required secrets:
+# ---- `GH_PAT` ----
+# Required for checking out multiple private repos.
+# See https://github.com/actions/checkout?tab=readme-ov-file#checkout-multiple-repos-private
+# ---- `ALADIN_HASH` ----
+# Hash number for decrypting aladin files.
+# ---- `ALADIN_KEY` ----
+# Hash key for decrypting aladin files.
+name: Auto-mine (Masterdata)
+
+on:
+  push:
+    paths:
+    - index/masterdata/**
+  workflow_dispatch:
+
+env:
+  REPO_DIR_DATAMINE_TOOLS: datamine-tools
+  REPO_DIR_ALADIN_INDEX: aladin/index
+  REPO_DIR_ALADIN_BLOBS: aladin/blob
+  REPO_DIR_UI_CORE: ui-core
+  REPO_DIR_EXPORTER: exporter
+  REPO_DIR_ASSETS: exporter/data/assets
+  REPO_DIR_MASTERDATA: exporter/data/db
+  STORAGE_DIR_DECRYPTED: .decrypted
+  STORAGE_DIR_EXPORTED: .exported
+  STORAGE_DIR_CACHE: .cache
+
+jobs:
+  main:
+    name: Auto-mine (Masterdata)
+    runs-on: windows-latest
+    environment: 'Auto-mine (Masterdata)'
+    steps:
+    - name: Git config global options
+      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-config-global@main
+
+    - name: Setup Datamine Repos
+      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/datamine-repos-setup@main
+      with:
+        github-pat: ${{ secrets.GH_PAT }}
+        repo-dir-datamine-tools: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
+        repo-dir-aladin-index: ${{ env.REPO_DIR_ALADIN_INDEX }}
+        repo-dir-aladin-blob: ${{ env.REPO_DIR_ALADIN_BLOBS }}
+        repo-dir-ui-core: ${{ env.REPO_DIR_UI_CORE }}
+        repo-dir-exporter: ${{ env.REPO_DIR_EXPORTER }}
+        repo-dir-assets: ${{ env.REPO_DIR_ASSETS }}
+        repo-dir-masterdata-dump: ${{ env.REPO_DIR_MASTERDATA }}
+
+    - name: Decrypt Aladin files
+      shell: pwsh
+      run: |
+        .\Script-01-Decrypt-Aladin.ps1 `
+          -AladinIndexDir "${{ github.workspace }}/${{ env.REPO_DIR_ALADIN_INDEX }}/index/masterdata" `
+          -AladinBlobDir "${{ github.workspace }}/${{ env.REPO_DIR_ALADIN_BLOBS }}/blobs/masterdata" `
+          -OutputDir "${{ github.workspace }}/${{ env.STORAGE_DIR_DECRYPTED }}" `
+          -Hash ${{ secrets.ALADIN_HASH }} `
+          -Key ${{ secrets.ALADIN_KEY }} `
+          -Mode masterdata `
+          -CacheDir "${{ github.workspace }}/${{ env.STORAGE_DIR_CACHE }}"
+      working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
+
+    - name: Export decrypted assets
+      shell: pwsh
+      run: |
+        .\Script-02B-Dump-Masterdata.ps1 `
+            -Source "${{ github.workspace }}/${{ env.STORAGE_DIR_DECRYPTED }}/MasterMemory.bytes" `
+            -OutputDir "${{ github.workspace }}/${{ env.REPO_DIR_MASTERDATA }}/exported"
+      working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
+
+    - name: Ensure UI core repo up-to-date
+      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
+      with:
+        repo-dir: ${{ env.REPO_DIR_UI_CORE }}
+
+    - name: Export / Data (Dry Run)
+      shell: pwsh
+      run: python main_export_data.py
+      working-directory: ${{ env.REPO_DIR_EXPORTER }}
+      env:
+        PTCGP_NO_DB: 1
+
+    - name: Update Datamine Repos
+      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/datamine-repos-update@main
+      with:
+        repo-dir-aladin-blob: ${{ env.REPO_DIR_ALADIN_BLOBS }}
+        repo-dir-ui-core: ${{ env.REPO_DIR_UI_CORE }}
+        repo-dir-exporter: ${{ env.REPO_DIR_EXPORTER }}
+        repo-dir-assets: ${{ env.REPO_DIR_ASSETS }}
+        repo-dir-masterdata-dump: ${{ env.REPO_DIR_MASTERDATA }}
