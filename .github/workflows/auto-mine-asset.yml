@@ -84,6 +84,17 @@ jobs:
       with:
         repo-dir: ${{ env.REPO_DIR_UI_CORE }}
 
+    - name: Re-encode Immersive Videos
+      shell: pwsh
+      run: |
+        $MasterdataIndex = $(Get-Content -Path "${{ github.workspace }}/${{ env.STORAGE_DIR_CACHE }}/assets-index.txt")
+        
+        .\Script-04-ReEncode-Immersives.ps1 `
+          -SourceDir ${{ github.workspace }}/${{ env.REPO_DIR_ASSETS }}/assets/ExportedProject/Assets/Asset_Bundles/Common/Video/Immersive `
+          -ExportTargetDir ${{ github.workspace }}/${{ env.REPO_DIR_UI_CORE }}/public/videos/immersive `
+          -FfmpegExe .\.tools\ffmpeg\ffmpeg.exe
+      working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
+
     - name: Export / Data (Dry Run)
       shell: pwsh
       run: python main_export_data.py

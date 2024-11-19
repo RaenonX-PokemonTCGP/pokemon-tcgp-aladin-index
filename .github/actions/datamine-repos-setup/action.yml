@@ -124,6 +124,13 @@ runs:
         ${{ inputs.repo-dir-datamine-tools }}/.tools/AssetRipper.CLI.FolderExport/AssetRipper.CLI.FolderExport.zip `
         -DestinationPath ${{ inputs.repo-dir-datamine-tools }}/.tools/AssetRipper.CLI.FolderExport
 
+  - name: Unzip FFMPEG
+    shell: pwsh
+    run: |
+      Expand-Archive `
+        ${{ inputs.repo-dir-datamine-tools }}/.tools/ffmpeg/ffmpeg.zip `
+        -DestinationPath ${{ inputs.repo-dir-datamine-tools }}/.tools/ffmpeg
+
   # - Moving exported assets changes `exporter`,
   #   therefore this needs to be before the call to `.\Script-03-Move-Exports-And-Commit.ps1`
   # - Submodules might not be up-to-date,
