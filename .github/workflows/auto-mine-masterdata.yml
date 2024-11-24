@@ -64,8 +64,8 @@ jobs:
       shell: pwsh
       run: |
         .\Script-02B-Dump-Masterdata.ps1 `
-            -Source "${{ github.workspace }}/${{ env.STORAGE_DIR_DECRYPTED }}/MasterMemory.bytes" `
-            -OutputDir "${{ github.workspace }}/${{ env.REPO_DIR_MASTERDATA }}/exported"
+          -Source "${{ github.workspace }}/${{ env.STORAGE_DIR_DECRYPTED }}/MasterMemory.bytes" `
+          -OutputDir "${{ github.workspace }}/${{ env.REPO_DIR_MASTERDATA }}/exported"
       working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
 
     - name: Ensure UI core repo up-to-date
@@ -88,3 +88,12 @@ jobs:
         repo-dir-exporter: ${{ env.REPO_DIR_EXPORTER }}
         repo-dir-assets: ${{ env.REPO_DIR_ASSETS }}
         repo-dir-masterdata-dump: ${{ env.REPO_DIR_MASTERDATA }}
+
+    - name: Trigger External CI (CCCRaim Masterdata Update)
+      shell: pwsh
+      run: |
+        .\Script-05-Trigger-External-CI.ps1 `
+          -GitHubRepo "cccRaim/ptcgp-workflow" `
+          -EventType sync-to-ftp `
+          -GitHubPat ${{ secrets.GH_CR_PAT }}
+      working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
