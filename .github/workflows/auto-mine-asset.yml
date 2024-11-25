@@ -126,7 +126,7 @@ jobs:
         repo-dir-assets: ${{ env.REPO_DIR_ASSETS }}
         repo-dir-masterdata-dump: ${{ env.REPO_DIR_MASTERDATA }}
 
-    - name: Trigger External CI (CCCRaim Masterdata Update)
+    - name: Trigger External CI (CCCRaim Assets Update)
       shell: pwsh
       run: |
         .\Script-05-Trigger-External-CI.ps1 `
