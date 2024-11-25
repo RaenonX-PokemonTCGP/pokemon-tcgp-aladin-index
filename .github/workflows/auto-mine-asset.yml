@@ -115,6 +115,7 @@ jobs:
       working-directory: ${{ env.REPO_DIR_EXPORTER }}
       env:
         PTCGP_IMG_EXPORT_PATH: ${{ github.workspace }}/${{ env.REPO_DIR_UI_CORE }}/public/images/game
+        PTCGP_CARD_IMG_EXPORT_PATH: ${{ github.workspace }}/${{ env.REPO_DIR_UI_CORE }}/public/images/game/card/full
 
     - name: Update Datamine Repos
       uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/datamine-repos-update@main
