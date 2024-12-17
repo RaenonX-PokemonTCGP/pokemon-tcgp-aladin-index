@@ -26,7 +26,7 @@ runs:
       $FileDiff = $(git status --porcelain)
       if ($FileDiff) {
         Write-Host $FileDiff
-        git commit -m "Updated by RaenonX-PokemonTCGP/pokemon-tcgp-assets@${{ github.sha }}"
+        git commit -m "Updated by RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index@${{ github.sha }}"
       } else {
         Write-Host "Nothing to commit"
       }
