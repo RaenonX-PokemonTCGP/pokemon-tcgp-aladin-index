@@ -69,11 +69,6 @@ jobs:
           -OutputDir "${{ github.workspace }}/${{ env.REPO_DIR_MASTERDATA }}/exported"
       working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
 
-    - name: Ensure UI core repo up-to-date
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
-      with:
-        repo-dir: ${{ env.REPO_DIR_UI_CORE }}
-
     - name: Export / Data (Dry Run)
       shell: pwsh
       run: python main_export_data.py
