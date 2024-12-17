@@ -53,6 +53,7 @@ jobs:
         .\Script-01-Decrypt-Aladin.ps1 `
           -AladinIndexDir "${{ github.workspace }}/${{ env.REPO_DIR_ALADIN_INDEX }}/index/masterdata" `
           -AladinBlobDir "${{ github.workspace }}/${{ env.REPO_DIR_ALADIN_BLOBS }}/blobs/masterdata" `
+          -AladinActiveIndexDir "${{ github.workspace }}/${{ env.REPO_DIR_ALADIN_INDEX }}/index/.active" `
           -OutputDir "${{ github.workspace }}/${{ env.STORAGE_DIR_DECRYPTED }}" `
           -Hash ${{ secrets.ALADIN_HASH }} `
           -Key ${{ secrets.ALADIN_KEY }} `
