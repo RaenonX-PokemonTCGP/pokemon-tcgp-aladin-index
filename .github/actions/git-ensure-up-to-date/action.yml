@@ -23,7 +23,7 @@ runs:
   - name: git reset to `${{ inputs.branch }}`
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
-    run: git reset --hard "origin/${{ inputs.branch }}"
+    run: git reset --soft "origin/${{ inputs.branch }}"
 
   # Ensures the repository is not in detached HEAD state
   - name: git switch to `${{ inputs.branch }}`
@@ -34,7 +34,7 @@ runs:
   - name: git pull (rebase)
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
-    run: git pull --rebase
+    run: git pull --rebase --autostash
 
   - name: git status (post-check)
     working-directory: ${{ inputs.repo-dir }}
