@@ -27,12 +27,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - name: Cache / Datamine Tools
-    uses: actions/cache@v4
-    with:
-      path: ${{ inputs.repo-dir-datamine-tools }}/.git
-      key: ${{ inputs.repo-dir-datamine-tools }}-git
-
   - name: Checkout / Datamine Tools
     uses: actions/checkout@v4
     with:
@@ -40,12 +34,6 @@ runs:
       ref: main
       token: ${{ inputs.github-pat }}
       path: ${{ inputs.repo-dir-datamine-tools }}
-
-  - name: Cache / Aladin Index
-    uses: actions/cache@v4
-    with:
-      path: ${{ inputs.repo-dir-aladin-index }}/.git
-      key: ${{ inputs.repo-dir-aladin-index }}-git
 
   - name: Checkout / Aladin Index
     uses: actions/checkout@v4
@@ -55,12 +43,6 @@ runs:
       token: ${{ inputs.github-pat }}
       path: ${{ inputs.repo-dir-aladin-index }}
 
-  - name: Cache / Aladin Blobs
-    uses: actions/cache@v4
-    with:
-      path: ${{ inputs.repo-dir-aladin-blob }}/.git
-      key: ${{ inputs.repo-dir-aladin-blob }}-git
-
   - name: Checkout / Aladin Blobs
     uses: actions/checkout@v4
     with:
@@ -69,12 +51,6 @@ runs:
       token: ${{ inputs.github-pat }}
       path: ${{ inputs.repo-dir-aladin-blob }}
 
-  - name: Cache / UI
-    uses: actions/cache@v4
-    with:
-      path: ${{ inputs.repo-dir-ui-core }}/.git
-      key: ${{ inputs.repo-dir-ui-core }}-git
-
   - name: Checkout / UI
     uses: actions/checkout@v4
     with:
@@ -82,12 +58,6 @@ runs:
       ref: main
       token: ${{ inputs.github-pat }}
       path: ${{ inputs.repo-dir-ui-core }}
-
-  - name: Cache / Exporter
-    uses: actions/cache@v4
-    with:
-      path: ${{ inputs.repo-dir-exporter }}/.git
-      key: ${{ inputs.repo-dir-exporter }}-git
 
   - name: Checkout / Exporter
     uses: actions/checkout@v4
