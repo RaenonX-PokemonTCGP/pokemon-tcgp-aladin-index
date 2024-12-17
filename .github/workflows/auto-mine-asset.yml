@@ -73,7 +73,7 @@ jobs:
       shell: pwsh
       run: |
         $MasterdataIndex = $(Get-Content -Path "${{ github.workspace }}/${{ env.STORAGE_DIR_CACHE }}/assets-index.txt")
-        
+
         .\Script-03-Move-Exports-And-Commit.ps1 `
           -AssetRepoDir ${{ github.workspace }}/${{ env.REPO_DIR_ASSETS }} `
           -ArExportedRootDir ${{ github.workspace }}/${{ env.STORAGE_DIR_EXPORTED }} `
@@ -81,7 +81,7 @@ jobs:
       working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
 
     - name: Ensure UI core repo up-to-date
-      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-ensure-up-to-date@main
+      uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/git-reset-hard-track-latest@main
       with:
         repo-dir: ${{ env.REPO_DIR_UI_CORE }}
 
@@ -89,7 +89,7 @@ jobs:
       shell: pwsh
       run: |
         $MasterdataIndex = $(Get-Content -Path "${{ github.workspace }}/${{ env.STORAGE_DIR_CACHE }}/assets-index.txt")
-        
+
         .\Script-04-ReEncode-Immersives.ps1 `
           -SourceDir ${{ github.workspace }}/${{ env.REPO_DIR_ASSETS }}/assets/ExportedProject/Assets/Asset_Bundles/Common/Video/Immersive `
           -ExportTargetDir ${{ github.workspace }}/${{ env.REPO_DIR_UI_CORE }}/public/videos/immersive `

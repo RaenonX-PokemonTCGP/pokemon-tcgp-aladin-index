@@ -20,21 +20,21 @@ runs:
     shell: pwsh
     run: git fetch
 
-  - name: git reset to `${{ inputs.branch }}`
-    working-directory: ${{ inputs.repo-dir }}
-    shell: pwsh
-    run: git reset --soft "origin/${{ inputs.branch }}"
-
   # Ensures the repository is not in detached HEAD state
   - name: git switch to `${{ inputs.branch }}`
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
     run: git switch -C "${{ inputs.branch }}"
 
-  - name: git pull (rebase)
+  - name: git hard reset to `${{ inputs.branch }}`
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
-    run: git pull --rebase --autostash
+    run: git reset --hard "origin/${{ inputs.branch }}"
+
+  - name: git pull
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: git pull
 
   - name: git status (post-check)
     working-directory: ${{ inputs.repo-dir }}
