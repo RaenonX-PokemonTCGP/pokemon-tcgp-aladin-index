@@ -17,12 +17,16 @@ runs:
   - name: git add all
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
-    run: git add .
+    run: |
+      Write-Host "git add all at ${{ inputs.repo-dir }}"
+      git add .
 
   - name: git commit
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
     run: |
+      Write-Host "git commit at ${{ inputs.repo-dir }}"
+      
       $FileDiff = $(git status --porcelain)
       if ($FileDiff) {
         Write-Host $FileDiff
@@ -31,15 +35,24 @@ runs:
         Write-Host "Nothing to commit"
       }
 
+  - name: git pull
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: |
+      Write-Host "git pull at ${{ inputs.repo-dir }}"
+      
+      # Make sure the history is linear
+      git pull --rebase --autostash
+
   - name: git push
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
     run: |
+      Write-Host "git push at ${{ inputs.repo-dir }}"
+      
       $RemoteDiff = $(git log origin/main..main)
       if ($RemoteDiff) {
         Write-Host $RemoteDiff
-        # Make sure the history is linear
-        git pull --rebase --autostash
         git push
       } else {
         Write-Host "Nothing to push"
