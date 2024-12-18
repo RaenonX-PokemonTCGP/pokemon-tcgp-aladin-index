@@ -14,3 +14,10 @@ act `
     -W .\.github\workflows\auto-mine-asset.yml `
      --secret-file .secrets-assets
 ```
+
+```powershell
+act `
+    -P windows-latest=-self-hosted `
+    -W .\.github\workflows\auto-mine-masterdata.yml `
+     --secret-file .secrets-masterdata
+```
