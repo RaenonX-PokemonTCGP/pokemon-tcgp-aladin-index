@@ -22,6 +22,18 @@ runs:
       
       git rev-parse HEAD
 
+  # `git pull` needs to be before `git add all`
+  # For submodule ref updating, `--autostash` won't work,
+  # therefore pulling all remote changes first before adding local changes
+  - name: git pull
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: |
+      Write-Host "git pull at ${{ inputs.repo-dir }}"
+      
+      # Make sure the history is linear
+      git pull --rebase --autostash
+
   - name: git add all
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
@@ -38,19 +50,10 @@ runs:
       $FileDiff = $(git status --porcelain)
       if ($FileDiff) {
         Write-Host $FileDiff
-        git commit -m "Updated by RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index@${{ github.sha }}"
+        git commit -m "Updated by ${{ github.repository }}@${{ github.sha }} (${{ github.workflow }})"
       } else {
         Write-Host "Nothing to commit"
       }
-
-  - name: git pull
-    working-directory: ${{ inputs.repo-dir }}
-    shell: pwsh
-    run: |
-      Write-Host "git pull at ${{ inputs.repo-dir }}"
-      
-      # Make sure the history is linear
-      git pull --rebase --autostash
 
   - name: git push
     working-directory: ${{ inputs.repo-dir }}
