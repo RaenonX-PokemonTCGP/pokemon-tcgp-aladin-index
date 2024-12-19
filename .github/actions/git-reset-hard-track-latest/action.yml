@@ -13,7 +13,9 @@ runs:
   - name: git status (pre-check)
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
-    run: git status
+    run: |
+      git status
+      git rev-parse HEAD
 
   - name: git fetch
     working-directory: ${{ inputs.repo-dir }}
@@ -39,4 +41,6 @@ runs:
   - name: git status (post-check)
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
-    run: git status
+    run: |
+      git status
+      git rev-parse HEAD

@@ -14,6 +14,14 @@ runs:
     shell: pwsh
     run: git config user.name "RaenonX (Auto Datamine)"
 
+  - name: git show current commit
+    working-directory: ${{ inputs.repo-dir }}
+    shell: pwsh
+    run: |
+      Write-Host "git show current commit at ${{ inputs.repo-dir }}"
+      
+      git rev-parse HEAD
+
   - name: git add all
     working-directory: ${{ inputs.repo-dir }}
     shell: pwsh
