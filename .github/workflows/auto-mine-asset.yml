@@ -88,8 +88,6 @@ jobs:
     - name: Re-encode Immersive Videos
       shell: pwsh
       run: |
-        $MasterdataIndex = $(Get-Content -Path "${{ github.workspace }}/${{ env.STORAGE_DIR_CACHE }}/assets-index.txt")
-
         .\Script-04-ReEncode-Immersives.ps1 `
           -SourceDir ${{ github.workspace }}/${{ env.REPO_DIR_ASSETS }}/assets/ExportedProject/Assets/Asset_Bundles/Common/Video/Immersive `
           -ExportTargetDir ${{ github.workspace }}/${{ env.REPO_DIR_UI_CORE }}/public/videos/immersive `
