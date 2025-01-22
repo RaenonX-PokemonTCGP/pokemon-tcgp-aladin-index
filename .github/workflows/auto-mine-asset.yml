@@ -72,12 +72,13 @@ jobs:
     - name: Move exported assets
       shell: pwsh
       run: |
-        $MasterdataIndex = $(Get-Content -Path "${{ github.workspace }}/${{ env.STORAGE_DIR_CACHE }}/assets-index.txt")
+        $AssetsIndex = $(Get-Content -Path "${{ github.workspace }}/${{ env.STORAGE_DIR_CACHE }}/assets-index.txt")
 
         .\Script-03-Move-Exports-And-Commit.ps1 `
           -AssetRepoDir ${{ github.workspace }}/${{ env.REPO_DIR_ASSETS }} `
           -ArExportedRootDir ${{ github.workspace }}/${{ env.STORAGE_DIR_EXPORTED }} `
-          -CommitNote "$MasterdataIndex"
+          -CommitNote "$AssetsIndex" `
+          -Log
       working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
 
     - name: Ensure UI core repo up-to-date
