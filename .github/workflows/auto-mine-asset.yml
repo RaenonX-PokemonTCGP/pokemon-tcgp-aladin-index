@@ -77,8 +77,7 @@ jobs:
         .\Script-03-Move-Exports-And-Commit.ps1 `
           -AssetRepoDir ${{ github.workspace }}/${{ env.REPO_DIR_ASSETS }} `
           -ArExportedRootDir ${{ github.workspace }}/${{ env.STORAGE_DIR_EXPORTED }} `
-          -CommitNote "$AssetsIndex" `
-          -Log
+          -CommitNote "$AssetsIndex"
       working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
 
     - name: Ensure UI core repo up-to-date
