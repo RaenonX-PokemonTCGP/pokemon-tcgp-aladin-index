@@ -103,13 +103,6 @@ jobs:
       with:
         repo-dir: ${{ env.REPO_DIR_MASTERDATA }}
 
-    - name: Export / Data (Dry Run)
-      shell: pwsh
-      run: python main_export_data.py
-      working-directory: ${{ env.REPO_DIR_EXPORTER }}
-      env:
-        PTCGP_NO_DB: 1
-
     - name: Export / I18n
       shell: pwsh
       run: python main_export_i18n.py

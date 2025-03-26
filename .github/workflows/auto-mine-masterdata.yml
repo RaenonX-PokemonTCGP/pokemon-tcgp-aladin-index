@@ -69,13 +69,6 @@ jobs:
           -OutputDir "${{ github.workspace }}/${{ env.REPO_DIR_MASTERDATA }}/exported"
       working-directory: ${{ env.REPO_DIR_DATAMINE_TOOLS }}
 
-    - name: Export / Data (Dry Run)
-      shell: pwsh
-      run: python main_export_data.py
-      working-directory: ${{ env.REPO_DIR_EXPORTER }}
-      env:
-        PTCGP_NO_DB: 1
-
     - name: Update Datamine Repos
       uses: RaenonX-PokemonTCGP/pokemon-tcgp-aladin-index/.github/actions/datamine-repos-update@main
       with:
