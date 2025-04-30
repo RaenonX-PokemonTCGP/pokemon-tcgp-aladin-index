@@ -9,9 +9,9 @@
 name: Auto-mine (Assets)
 
 on:
-  push:
-    paths:
-    - index/assets/**
+  #  push:
+  #    paths:
+  #    - index/assets/**
   workflow_dispatch:
 
 env:
