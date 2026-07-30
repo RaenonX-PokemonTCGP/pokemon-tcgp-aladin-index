@@ -50,7 +50,9 @@ runs:
       $FileDiff = $(git status --porcelain)
       if ($FileDiff) {
         Write-Host $FileDiff
-        git commit -m "Updated by ${{ github.repository }}@${{ github.sha }} (${{ github.workflow }})"
+        git commit `
+          -m "update: data dump $(Get-Date -Format yyyyMMdd)" `
+          -m "Updated by ${{ github.repository }}@${{ github.sha }} (${{ github.workflow }})"
       } else {
         Write-Host "Nothing to commit"
       }
